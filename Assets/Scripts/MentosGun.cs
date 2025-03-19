@@ -1,8 +1,9 @@
+using System;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
 
-public class TrajectoryPredictor : MonoBehaviour
+public class MentosGun : MonoBehaviour
 {
     public Transform mentosGraphic;
     public float speedRotateMentos = 5f;
@@ -20,13 +21,16 @@ public class TrajectoryPredictor : MonoBehaviour
 
     [Inject] private Scripts.Input _input;
 
+    private Rigidbody _rigidbody;
     private Vector3 startPosition;
     private float linearMove;
     private float elapsedTime;
     private bool isThrown;
+    private bool isDisabled;
 
     private void Awake()
     {
+        _rigidbody = GetComponent<Rigidbody>();
         RefreshStartPosition();
     }
 
@@ -42,15 +46,15 @@ public class TrajectoryPredictor : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isThrown)
+        if (!isThrown && !isDisabled)
         {
             MoveTarget();
+            DrawTrajectory();
         }
-        
-        DrawTrajectory();
 
         if (isThrown)
         {
+            lineRenderer.positionCount = 0;
             elapsedTime += Time.deltaTime;
 
             if (elapsedTime < duration)
@@ -64,8 +68,15 @@ public class TrajectoryPredictor : MonoBehaviour
             else
             {
                 isThrown = false; // Завершаем движение
+                isDisabled = true;
+                _rigidbody.useGravity = true;
                 RefreshStartPosition();
             }
+        }
+        
+        if (!isThrown && isDisabled)
+        {
+            targetPosition.position = transform.position;
         }
     }
 
@@ -114,5 +125,14 @@ public class TrajectoryPredictor : MonoBehaviour
         Vector3 currentPos = Vector3.Lerp(startPosition, targetPosition.position, t); // Линейное движение по X и Z
         currentPos.y += y; // Добавляем высоту
         return currentPos;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Finish"))
+        {
+            if(other.TryGetComponent(out ActiveGameObject activeGameObject))
+                activeGameObject.Action?.Invoke();
+        }
     }
 }
