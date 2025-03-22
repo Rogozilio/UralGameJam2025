@@ -621,7 +621,8 @@ MonoBehaviour:
   mainPanel: {fileID: 1307923292434624760}
   btnContinue: {fileID: 5366571175749002846}
   btnExit: {fileID: 3181887547560327278}
-  mouseSensitivity: {fileID: 0}
+  mouseSensitivity: {fileID: 809486290915681068}
+  volumeSound: {fileID: 6739193467267253304}
 --- !u!1 &2575028605260755936
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,7 +1189,7 @@ GameObject:
   - component: {fileID: 3680235321084626474}
   - component: {fileID: 6739193467267253304}
   m_Layer: 5
-  m_Name: Slider (1)
+  m_Name: SliderSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1561,7 +1562,7 @@ GameObject:
   - component: {fileID: 6174482285338881394}
   - component: {fileID: 809486290915681068}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: SliderMouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

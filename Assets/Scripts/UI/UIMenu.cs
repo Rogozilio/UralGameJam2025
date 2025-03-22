@@ -12,6 +12,7 @@ public class UIMenu : MonoBehaviour
     public Button btnContinue;
     public Button btnExit;
     public Slider mouseSensitivity;
+    public Slider volumeSound;
     
     private void OnEnable()
     {
