@@ -1,12 +1,20 @@
 using System;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 public class MentosGun : MonoBehaviour
 {
+    [Inject] private ScreenFade _screen;
+
+    public bool isActive;
+    public GameObject virtualCamera;
+    public Collider finishZone;
+    [Space]
     public Transform mentosGraphic;
     public float speedRotateMentos = 5f;
+    public float scale = 0.3f;
     [Space]
     public Transform targetPosition; // Целевая позиция
     public float height = 5f; // Высота траектории
@@ -18,11 +26,17 @@ public class MentosGun : MonoBehaviour
     public float maxDistanceCurve = 10f;
     public float deltaDistanceCurve = 1f;
     public float deltaRotateCurve = 3f;
+    [Space] 
+    public AudioSource audioСola;
+    public AudioSource audio;
+    public AudioClip launch;
+    public AudioClip finish;
 
     [Inject] private Scripts.Input _input;
 
     private Rigidbody _rigidbody;
     private Vector3 startPosition;
+    private Vector3 originStartPosition;
     private float linearMove;
     private float elapsedTime;
     private bool isThrown;
@@ -32,16 +46,37 @@ public class MentosGun : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         RefreshStartPosition();
+        originStartPosition = transform.position;
+        
+        _screen.LaunchFadeOut();
     }
 
     private void OnEnable()
     {
         _input.OnAction += Fire;
+        transform.localScale = new Vector3(scale, scale, scale);
+        audioСola.Play();
     }
 
     private void OnDisable()
     {
         _input.OnAction -= Fire;
+    }
+
+    private void OnValidate()
+    {
+        if (isActive)
+        {
+            virtualCamera.SetActive(true);
+            enabled = true;
+            finishZone.enabled = false;
+        }
+        if (!isActive)
+        {
+            virtualCamera.SetActive(false);
+            enabled = false;
+            finishZone.enabled = true;
+        }
     }
 
     void FixedUpdate()
@@ -54,6 +89,7 @@ public class MentosGun : MonoBehaviour
 
         if (isThrown)
         {
+            mentosGraphic.gameObject.SetActive(true);
             lineRenderer.positionCount = 0;
             elapsedTime += Time.deltaTime;
 
@@ -67,14 +103,14 @@ public class MentosGun : MonoBehaviour
             }
             else
             {
-                isThrown = false; // Завершаем движение
+                //isThrown = false; // Завершаем движение
                 isDisabled = true;
                 _rigidbody.useGravity = true;
                 RefreshStartPosition();
             }
         }
         
-        if (!isThrown && isDisabled)
+        if (isDisabled)
         {
             targetPosition.position = transform.position;
         }
@@ -82,9 +118,14 @@ public class MentosGun : MonoBehaviour
 
     private void Fire()
     {
+        if (!isThrown)
+        {
+            audio.clip = launch;
+            audio.Play();
+            elapsedTime = 0f;
+            RefreshStartPosition();
+        }
         isThrown = true;
-        elapsedTime = 0f;
-        RefreshStartPosition();
     }
 
     private void MoveTarget()
@@ -131,8 +172,34 @@ public class MentosGun : MonoBehaviour
     {
         if (other.CompareTag("Finish"))
         {
-            if(other.TryGetComponent(out ActiveGameObject activeGameObject))
+            if(!enabled) return;
+            if (other.TryGetComponent(out ActiveGameObject activeGameObject))
+            {
+                Debug.Log("test");
                 activeGameObject.Action?.Invoke();
+                virtualCamera.SetActive(false);
+                gameObject.SetActive(false);;
+            }
+                
         }
+        else if (other.CompareTag("Dead"))
+        {
+            _screen.LaunchFadeIn(Restart);
+        }
+    }
+
+    private void Restart()
+    {
+        isThrown = false;
+        isDisabled = false;
+        elapsedTime = 0f;
+        transform.position = originStartPosition;
+        _rigidbody.useGravity = false;
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
+        mentosGraphic.gameObject.SetActive(false);
+        audioСola.Play();
+        RefreshStartPosition();
+        _screen.LaunchFadeOut();
     }
 }
