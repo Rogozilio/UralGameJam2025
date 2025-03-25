@@ -7,8 +7,11 @@ using Input = Scripts.Input;
 
 public class PlantGenerator : MonoBehaviour
 {
+    [Inject] private ScreenFade _screen;
     [Inject] private Input _input;
-    
+
+    public MeshFilter mesh;
+    public Animator animator;
     public Transform pointGrow;
     public float speedGrowUp = 1f;
     public float forceLeft = -0.1f;
@@ -20,16 +23,25 @@ public class PlantGenerator : MonoBehaviour
     public UnityEvent onEnterFinishZone;
     public UnityEvent onEnterDeadZone;
 
+    private float _originForceLeft;
+    private Vector3 _originPosition;
+    private Vector3 _originEulerRotate;
+
     void Awake()
     {
         points = new List<Vector3>();
-        AddPoint(pointGrow.position);
-        AddPoint(pointGrow.position);
+        AddPoint(pointGrow.localPosition);
+        AddPoint(pointGrow.localPosition);
+
+        _originForceLeft = forceLeft;
+        _originPosition = transform.position;
+        _originEulerRotate = transform.eulerAngles;
     }
 
     private void OnEnable()
     {
         _input.OnAction += ChangeForceLeftToRight;
+        _screen.LaunchFadeOut(null, 0f);
     }
 
     private void OnDisable()
@@ -39,12 +51,15 @@ public class PlantGenerator : MonoBehaviour
 
     private void FixedUpdate()
     {
+        pointGrow.up = 
+            Quaternion.Euler(0, 90f, 0) * (points[^1] - points[^2]).normalized;
+        
         forceLeft += stepForceLeft;
         forceLeft = math.clamp(forceLeft, -0.15f, 0.15f);
         
-        pointGrow.position += new Vector3(forceLeft, speedGrowUp, 0f) * Time.fixedDeltaTime;
+        pointGrow.localPosition += new Vector3(forceLeft, speedGrowUp, 0f) * Time.fixedDeltaTime;
 
-        UpdateLastPoint(pointGrow.position);
+        UpdateLastPoint(pointGrow.localPosition);
         AutoAddPoint();
     }
 
@@ -65,10 +80,10 @@ public class PlantGenerator : MonoBehaviour
 
     private void AutoAddPoint()
     {
-        if (pointGrow.position.y - points[^2].y > 0.1f)
+        if (pointGrow.localPosition.y - points[^2].y > 0.1f)
         {
             Debug.Log("AddPoint");
-            AddPoint(pointGrow.position);
+            AddPoint(pointGrow.localPosition);
         }
     }
 
@@ -76,13 +91,32 @@ public class PlantGenerator : MonoBehaviour
     {
         if (other.transform.CompareTag("Finish"))
         {
+            pointGrow.up = Vector3.up;
+            animator.Play("Bloom");
             enabled = false;
         }
         
         if (other.transform.CompareTag("Respawn"))
         {
+            _screen.LaunchFadeIn(Restart);
             enabled = false;
             onEnterDeadZone?.Invoke();
         }
+    }
+
+    private void Restart()
+    {
+        enabled = true;
+        forceLeft = _originForceLeft;
+        transform.position = _originPosition;
+        transform.eulerAngles = _originEulerRotate;
+
+        mesh.mesh = new Mesh();
+        
+        points = new List<Vector3>();
+        AddPoint(pointGrow.localPosition);
+        AddPoint(pointGrow.localPosition);
+        
+        _screen.LaunchFadeOut(null, 0f);
     }
 }
