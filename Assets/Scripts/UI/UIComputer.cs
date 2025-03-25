@@ -23,12 +23,12 @@ public class UIComputer : MonoBehaviour
     
     public void OpenItchIOPage()
     {
-        ItchIOPage.DOMove(new Vector3(-50 , 0, 0), 0.5f);
+        ItchIOPage.DOMove(ItchIOPage.position + new Vector3(50 , 0, 0), 0.5f);
     }
     
     public void CloseItchIOPage()
     {
-        ItchIOPage.DOMove(new Vector3(-100 , 0, 0), 0.5f);
+        ItchIOPage.DOMove(ItchIOPage.position + new Vector3(-50 , 0, 0), 0.5f);
     }
     
     public void OpenTelegramPage()

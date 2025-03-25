@@ -164,7 +164,7 @@ public class MentosGun : MonoBehaviour
         // Параболическая траектория
         float y = height * Mathf.Sin(Mathf.PI * t); // Высота изменяется по синусоиде
         Vector3 currentPos = Vector3.Lerp(startPosition, targetPosition.position, t); // Линейное движение по X и Z
-        currentPos.y += y; // Добавляем высоту
+        currentPos.y += y - 0.02f; // Добавляем высоту
         return currentPos;
     }
 
@@ -178,7 +178,7 @@ public class MentosGun : MonoBehaviour
                 Debug.Log("test");
                 activeGameObject.Action?.Invoke();
                 virtualCamera.SetActive(false);
-                gameObject.SetActive(false);;
+                gameObject.SetActive(false);
             }
                 
         }

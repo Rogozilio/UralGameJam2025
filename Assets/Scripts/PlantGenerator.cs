@@ -30,8 +30,8 @@ public class PlantGenerator : MonoBehaviour
     void Awake()
     {
         points = new List<Vector3>();
-        AddPoint(pointGrow.position);
-        AddPoint(pointGrow.position);
+        AddPoint(pointGrow.localPosition);
+        AddPoint(pointGrow.localPosition);
 
         _originForceLeft = forceLeft;
         _originPosition = transform.position;
@@ -52,14 +52,14 @@ public class PlantGenerator : MonoBehaviour
     private void FixedUpdate()
     {
         pointGrow.up = 
-            (points[^1] - points[^2]).normalized;
+            Quaternion.Euler(0, 90f, 0) * (points[^1] - points[^2]).normalized;
         
         forceLeft += stepForceLeft;
         forceLeft = math.clamp(forceLeft, -0.15f, 0.15f);
         
-        pointGrow.position += new Vector3(forceLeft, speedGrowUp, 0f) * Time.fixedDeltaTime;
+        pointGrow.localPosition += new Vector3(forceLeft, speedGrowUp, 0f) * Time.fixedDeltaTime;
 
-        UpdateLastPoint(pointGrow.position);
+        UpdateLastPoint(pointGrow.localPosition);
         AutoAddPoint();
     }
 
@@ -80,10 +80,10 @@ public class PlantGenerator : MonoBehaviour
 
     private void AutoAddPoint()
     {
-        if (pointGrow.position.y - points[^2].y > 0.1f)
+        if (pointGrow.localPosition.y - points[^2].y > 0.1f)
         {
             Debug.Log("AddPoint");
-            AddPoint(pointGrow.position);
+            AddPoint(pointGrow.localPosition);
         }
     }
 
@@ -114,8 +114,8 @@ public class PlantGenerator : MonoBehaviour
         mesh.mesh = new Mesh();
         
         points = new List<Vector3>();
-        AddPoint(pointGrow.position);
-        AddPoint(pointGrow.position);
+        AddPoint(pointGrow.localPosition);
+        AddPoint(pointGrow.localPosition);
         
         _screen.LaunchFadeOut(null, 0f);
     }
