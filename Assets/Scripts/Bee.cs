@@ -1,10 +1,14 @@
+using System;
+using Scripts;
 using UnityEngine;
 using Zenject;
 using Input = Scripts.Input;
 
-public class Bee : MonoBehaviour
+public class Bee : MonoBehaviour, IRestart
 {
     [Inject] private Input _input;
+    [Inject] private ScreenFade _screenFade;
+    [Inject] private GameManager _gameManager;
     
     public float speedInclination = 0.2f;
 
@@ -14,6 +18,20 @@ public class Bee : MonoBehaviour
     
     private float _inclinationAngle;
     private float _inclinationAngleModel;
+
+    private Vector3 _originPosition;
+    private Vector3 _originEulerAngle;
+
+    private void Awake()
+    {
+        _originPosition = target.position;
+        _originEulerAngle = target.eulerAngles;
+    }
+
+    private void OnEnable()
+    {
+        _screenFade.LaunchFadeOut(null, 0f);
+    }
 
     private void FixedUpdate()
     {
@@ -38,29 +56,29 @@ public class Bee : MonoBehaviour
             _inclinationAngleModel -= speedInclination;
         }
 
-        if (_input.PressLeftMove)
-        {
-            rb.velocity = -target.right;
-            _inclinationAngle += speedInclination;
-        }
-
-        if (_input.PressRightMove)
-        {
-            rb.velocity = target.right;
-            _inclinationAngle -= speedInclination;
-        }
+        // if (_input.PressLeftMove)
+        // {
+        //     rb.velocity = -target.right;
+        //     _inclinationAngle += speedInclination;
+        // }
+        //
+        // if (_input.PressRightMove)
+        // {
+        //     rb.velocity = target.right;
+        //     _inclinationAngle -= speedInclination;
+        // }
         
-        if (!_input.PressRightMove && !_input.PressLeftMove)
-        {
-            _inclinationAngle += _inclinationAngle > 0 ? -speedInclination : speedInclination;
-            if (_inclinationAngle <= 0.5f && _inclinationAngle >= -0.5f)
-                _inclinationAngle = 0f;
-        }
+        // if (!_input.PressRightMove && !_input.PressLeftMove)
+        // {
+        //     _inclinationAngle += _inclinationAngle > 0 ? -speedInclination : speedInclination;
+        //     if (_inclinationAngle <= 0.5f && _inclinationAngle >= -0.5f)
+        //         _inclinationAngle = 0f;
+        // }
         
         if (!_input.PressForwardMove && !_input.PressBackMove)
         {
             _inclinationAngleModel += _inclinationAngleModel > 0 ? -speedInclination : speedInclination;
-            if (_inclinationAngleModel <= 0.5f && _inclinationAngleModel >= -0.5f)
+            if (_inclinationAngleModel <= 2f && _inclinationAngleModel >= -2f)
                 _inclinationAngleModel = 0f;
         }
         
@@ -85,5 +103,23 @@ public class Bee : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(cameraForward, cameraUp);
         
         target.transform.rotation = targetRotation;
+    }
+
+    public void Restart()
+    {
+        _screenFade.LaunchFadeIn(() =>
+        {
+            target.position = _originPosition;
+            target.eulerAngles = _originPosition;
+            _screenFade.LaunchFadeOut(null, 0f);
+        });
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("Finish"))
+        {
+            _gameManager.SwitchGameStep(GameStep.CutsceneBee_Computer);
+        }
     }
 }

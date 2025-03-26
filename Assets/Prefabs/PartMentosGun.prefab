@@ -171,26 +171,26 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2987125270669254269}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2822ed8112d54dc418be76bb53f703eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 1
+  isActive: 0
   virtualCamera: {fileID: 6819831557372936337}
   finishZone: {fileID: 2009616066436781439}
   mentosGraphic: {fileID: 2784353519661350076}
-  speedRotateMentos: 5
+  speedRotateMentos: 15
   scale: 0.3
   targetPosition: {fileID: 9064075022170838972}
-  height: 1
-  duration: 2
+  height: 0.3
+  duration: 0.8
   lineRenderer: {fileID: 2789035569372955720}
   resolution: 50
   minDistanceCurve: 0.1
-  maxDistanceCurve: 2
-  deltaDistanceCurve: 0.03
-  deltaRotateCurve: 1
+  maxDistanceCurve: 0.5
+  deltaDistanceCurve: 0.01
+  deltaRotateCurve: 0.5
   "audio\u0421ola": {fileID: 5727933922558855984}
   audio: {fileID: 9128016694997010622}
   launch: {fileID: 8300000, guid: da73ed9dc0529e04ba0ad7e6531a69fd, type: 3}
@@ -216,7 +216,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 4487510027563274142, guid: ce6cfb17c7b646a4ab0ee9b5fce1b41b, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -275,14 +275,32 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.039081573
-        value: 0.02020073
+        time: 0
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.16631128
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.18336886
+        value: 0.004672896
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -775,7 +793,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1075,7 +1093,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3481406457855936315
 Transform:
   m_ObjectHideFlags: 0
@@ -1084,8 +1102,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6819831557372936337}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14520773, y: 0.000000017024016, z: -0.0000000024984999, w: 0.9894012}
-  m_LocalPosition: {x: -0.021989007, y: 0.19852775, z: -1.4640672}
+  m_LocalRotation: {x: 0.14521298, y: 1e-45, z: -0, w: 0.98940045}
+  m_LocalPosition: {x: -0.02200263, y: 0.19857118, z: -1.4640715}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

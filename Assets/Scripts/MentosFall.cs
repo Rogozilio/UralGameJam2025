@@ -7,6 +7,7 @@ public class MentosFall : MonoBehaviour
 {
     [Inject] private ScreenFade _screen;
     [Inject] private Input _input;
+    [Inject] private GameManager _gameManager;
 
     public float speed;
     public float speedRotate;
@@ -86,7 +87,7 @@ public class MentosFall : MonoBehaviour
 
         if (other.gameObject.CompareTag("Finish"))
         {
-            
+            _gameManager.SwitchGameStep(GameStep.CutsceneMentosFall_MentosGun);
         }
     }
 

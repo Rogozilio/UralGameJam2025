@@ -11,28 +11,25 @@ public class MentosGun : MonoBehaviour
     public bool isActive;
     public GameObject virtualCamera;
     public Collider finishZone;
-    [Space]
-    public Transform mentosGraphic;
+    [Space] public Transform mentosGraphic;
     public float speedRotateMentos = 5f;
     public float scale = 0.3f;
-    [Space]
-    public Transform targetPosition; // Целевая позиция
+    [Space] public Transform targetPosition; // Целевая позиция
     public float height = 5f; // Высота траектории
     public float duration = 2f; // Время полета
     public LineRenderer lineRenderer; // Компонент LineRenderer
     public int resolution = 30; // Количество точек на траектории
-    [Space] 
-    public float minDistanceCurve = 1f;
+    [Space] public float minDistanceCurve = 1f;
     public float maxDistanceCurve = 10f;
     public float deltaDistanceCurve = 1f;
     public float deltaRotateCurve = 3f;
-    [Space] 
-    public AudioSource audioСola;
+    [Space] public AudioSource audioСola;
     public AudioSource audio;
     public AudioClip launch;
     public AudioClip finish;
 
     [Inject] private Scripts.Input _input;
+    [Inject] private GameManager _gameManager;
 
     private Rigidbody _rigidbody;
     private Vector3 startPosition;
@@ -42,17 +39,25 @@ public class MentosGun : MonoBehaviour
     private bool isThrown;
     private bool isDisabled;
 
+    public bool IsActive
+    {
+        set
+        {
+            isActive = value;
+            OnValidate();
+        }
+    }
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         RefreshStartPosition();
         originStartPosition = transform.position;
-        
-        _screen.LaunchFadeOut();
     }
 
     private void OnEnable()
     {
+        _screen.LaunchFadeOut();
         _input.OnAction += Fire;
         transform.localScale = new Vector3(scale, scale, scale);
         audioСola.Play();
@@ -71,6 +76,7 @@ public class MentosGun : MonoBehaviour
             enabled = true;
             finishZone.enabled = false;
         }
+
         if (!isActive)
         {
             virtualCamera.SetActive(false);
@@ -109,7 +115,7 @@ public class MentosGun : MonoBehaviour
                 RefreshStartPosition();
             }
         }
-        
+
         if (isDisabled)
         {
             targetPosition.position = transform.position;
@@ -125,6 +131,7 @@ public class MentosGun : MonoBehaviour
             elapsedTime = 0f;
             RefreshStartPosition();
         }
+
         isThrown = true;
     }
 
@@ -132,7 +139,7 @@ public class MentosGun : MonoBehaviour
     {
         linearMove += math.clamp(_input.deltaMovePosition.y, -deltaDistanceCurve, deltaDistanceCurve);
         linearMove = math.clamp(linearMove, minDistanceCurve, maxDistanceCurve);
-        
+
         targetPosition.position = transform.position + transform.forward * linearMove;
 
         var angleRotate = math.clamp(_input.deltaMovePosition.x, -deltaRotateCurve, deltaRotateCurve);
@@ -143,7 +150,7 @@ public class MentosGun : MonoBehaviour
     {
         startPosition = transform.position; // Запоминаем начальную позицию
     }
-    
+
 
     void DrawTrajectory()
     {
@@ -172,20 +179,23 @@ public class MentosGun : MonoBehaviour
     {
         if (other.CompareTag("Finish"))
         {
-            if(!enabled) return;
+            if (!enabled) return;
             if (other.TryGetComponent(out ActiveGameObject activeGameObject))
             {
-                Debug.Log("test");
                 activeGameObject.Action?.Invoke();
                 virtualCamera.SetActive(false);
                 gameObject.SetActive(false);
             }
-                
         }
         else if (other.CompareTag("Dead"))
         {
             _screen.LaunchFadeIn(Restart);
         }
+    }
+
+    public void Finish()
+    {
+        _gameManager.SwitchGameStep(GameStep.СutsceneMentosGun_Toaster);
     }
 
     private void Restart()

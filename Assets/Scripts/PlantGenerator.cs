@@ -9,6 +9,7 @@ public class PlantGenerator : MonoBehaviour
 {
     [Inject] private ScreenFade _screen;
     [Inject] private Input _input;
+    [Inject] private GameManager _gameManager;
 
     public MeshFilter mesh;
     public Animator animator;
@@ -94,6 +95,7 @@ public class PlantGenerator : MonoBehaviour
             pointGrow.up = Vector3.up;
             animator.Play("Bloom");
             enabled = false;
+            _gameManager.SwitchGameStep(GameStep.CutscenePlant_Bee, 2f);
         }
         
         if (other.transform.CompareTag("Respawn"))
