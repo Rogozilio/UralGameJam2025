@@ -1,9 +1,10 @@
 using System;
+using Scripts;
 using UnityEngine;
 using Zenject;
 using Input = Scripts.Input;
 
-public class MentosFall : MonoBehaviour
+public class MentosFall : MonoBehaviour, IRestart
 {
     [Inject] private ScreenFade _screen;
     [Inject] private Input _input;
@@ -68,7 +69,7 @@ public class MentosFall : MonoBehaviour
         }
     }
 
-    private void Restart()
+    public void Restart()
     {
         _isPlayingAudioObstacle = false;
         transform.position = _originPosition;

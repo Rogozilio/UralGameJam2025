@@ -1,10 +1,11 @@
 using System;
+using Scripts;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Zenject;
 
-public class MentosGun : MonoBehaviour
+public class MentosGun : MonoBehaviour, IRestart
 {
     [Inject] private ScreenFade _screen;
 
@@ -198,7 +199,7 @@ public class MentosGun : MonoBehaviour
         _gameManager.SwitchGameStep(GameStep.СutsceneMentosGun_Toaster);
     }
 
-    private void Restart()
+    public void Restart()
     {
         isThrown = false;
         isDisabled = false;
