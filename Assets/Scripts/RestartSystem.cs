@@ -7,13 +7,17 @@ namespace Scripts
     {
         public static void Restart()
         {
-            var restartObjects = FindObjectsOfType<MonoBehaviour>().OfType<IRestart>().ToArray();
+            var restartObjects = FindObjectsOfType<MonoBehaviour>(false).OfType<IRestart>().ToArray();
 
-            Debug.Log("Restart - " + restartObjects.Length);
+        
             
             foreach (IRestart obj in restartObjects)
             {
-                obj.Restart();
+                if (((MonoBehaviour)obj).enabled) // Дополнительная проверка
+                {
+                    Debug.Log("Restart " + ((MonoBehaviour)obj).name);
+                    obj.Restart();
+                }
             }
         }
     }

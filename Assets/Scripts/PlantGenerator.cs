@@ -113,7 +113,7 @@ public class PlantGenerator : MonoBehaviour, IRestart
         if (other.transform.CompareTag("Respawn"))
         {
             _audio.PlayOneShot(_clipPunch);
-            _screen.LaunchFadeIn(Restart);
+            Restart();
             enabled = false;
             onEnterDeadZone?.Invoke();
         }
@@ -121,20 +121,23 @@ public class PlantGenerator : MonoBehaviour, IRestart
 
     public void Restart()
     {
-        enabled = true;
-        forceLeft = _originForceLeft;
-        transform.position = _originPosition;
-        transform.eulerAngles = _originEulerRotate;
+        _screen.LaunchFadeIn(() =>
+        {
+            enabled = true;
+            forceLeft = _originForceLeft;
+            transform.position = _originPosition;
+            transform.eulerAngles = _originEulerRotate;
 
-        mesh.mesh = new Mesh();
-        
-        points = new List<Vector3>();
-        AddPoint(pointGrow.localPosition);
-        AddPoint(pointGrow.localPosition);
-        
-        _audio.Stop();
-        _audio.Play();
-        
-        _screen.LaunchFadeOut(null, 0f);
+            mesh.mesh = new Mesh();
+
+            points = new List<Vector3>();
+            AddPoint(pointGrow.localPosition);
+            AddPoint(pointGrow.localPosition);
+
+            _audio.Stop();
+            _audio.Play();
+
+            _screen.LaunchFadeOut(null, 0f);
+        });
     }
 }

@@ -114,11 +114,7 @@ public class MoveCockroach : MonoBehaviour, IRestart
 
         if (other.transform.CompareTag("Dead"))
         {
-            _screenFade.LaunchFadeIn(() =>
-            {
-                Restart();
-                _screenFade.LaunchFadeOut();
-            });
+            Restart();
             
         }
         
@@ -136,7 +132,11 @@ public class MoveCockroach : MonoBehaviour, IRestart
 
     public void Restart()
     {
-        transform.position = _respawnPosition;
-        transform.rotation = _respawnRotation;
+        _screenFade.LaunchFadeIn(() =>
+        {
+            transform.position = _respawnPosition;
+            transform.rotation = _respawnRotation;
+            _screenFade.LaunchFadeOut();
+        });
     }
 }

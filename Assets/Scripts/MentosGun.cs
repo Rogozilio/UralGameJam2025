@@ -190,7 +190,7 @@ public class MentosGun : MonoBehaviour, IRestart
         }
         else if (other.CompareTag("Dead"))
         {
-            _screen.LaunchFadeIn(Restart);
+            Restart();
         }
     }
 
@@ -201,16 +201,19 @@ public class MentosGun : MonoBehaviour, IRestart
 
     public void Restart()
     {
-        isThrown = false;
-        isDisabled = false;
-        elapsedTime = 0f;
-        transform.position = originStartPosition;
-        _rigidbody.useGravity = false;
-        _rigidbody.velocity = Vector3.zero;
-        _rigidbody.angularVelocity = Vector3.zero;
-        mentosGraphic.gameObject.SetActive(false);
-        audioСola.Play();
-        RefreshStartPosition();
-        _screen.LaunchFadeOut();
+        _screen.LaunchFadeIn((() =>
+        {
+            isThrown = false;
+            isDisabled = false;
+            elapsedTime = 0f;
+            transform.position = originStartPosition;
+            _rigidbody.useGravity = false;
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            mentosGraphic.gameObject.SetActive(false);
+            audioСola.Play();
+            RefreshStartPosition();
+            _screen.LaunchFadeOut();
+        }));
     }
 }
