@@ -122,7 +122,7 @@ public class Toaster : MonoBehaviour, IRestart
         _audio.Play();
         _collider.enabled = false;
         particleFail.Play();
-        _screen.LaunchFadeIn(Restart, 3f);
+        Restart();
     }
 
     private void FailBeforeFinish()

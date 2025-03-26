@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -13,7 +14,12 @@ public class UIMenu : MonoBehaviour
     public Button btnExit;
     public Slider mouseSensitivity;
     public Slider volumeSound;
-    
+
+    private void Awake()
+    {
+        mainPanel.SetActive(false);
+    }
+
     private void OnEnable()
     {
         _input.OnActionEcs += HideOrShow;

@@ -44299,7 +44299,7 @@ PrefabInstance:
     - target: {fileID: 1307923292434624760, guid: a4ab9e0efa165e44d94aff24c80dc6e1,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1512584533346217590, guid: a4ab9e0efa165e44d94aff24c80dc6e1,
         type: 3}
@@ -69794,6 +69794,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4332170105774453034, guid: d3b6361707f2cfd498374df31373fdc4,
+        type: 3}
+      propertyPath: gameStep
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4332170105774453034, guid: d3b6361707f2cfd498374df31373fdc4,
         type: 3}
