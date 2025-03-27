@@ -28,6 +28,7 @@ public class MentosGun : MonoBehaviour, IRestart
     public AudioSource audio;
     public AudioClip launch;
     public AudioClip finish;
+    public ParticleSystem colaFinish;
 
     [Inject] private Scripts.Input _input;
     [Inject] private GameManager _gameManager;
@@ -127,6 +128,8 @@ public class MentosGun : MonoBehaviour, IRestart
     {
         if (!isThrown)
         {
+            if (!colaFinish.isPlaying)
+                colaFinish.Play();
             audio.clip = launch;
             audio.Play();
             elapsedTime = 0f;
@@ -196,11 +199,14 @@ public class MentosGun : MonoBehaviour, IRestart
 
     public void Finish()
     {
+        if (!colaFinish.isPlaying)
+            colaFinish.Play();
         _gameManager.SwitchGameStep(GameStep.СutsceneMentosGun_Toaster);
     }
 
     public void Restart()
     {
+        colaFinish.Stop();
         _screen.LaunchFadeIn((() =>
         {
             isThrown = false;

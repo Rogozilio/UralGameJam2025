@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c2f4ac790efc458ad52e8f6bf7f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameStep: 1
+  gameStep: 5
   cutsceneBegin: {fileID: 0}
   cutsceneMentosMove_MentosFall: {fileID: 0}
   cutsceneMentosFall_MentosGun: {fileID: 0}
@@ -503,6 +503,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LevelForCockroach
+      objectReference: {fileID: 0}
+    - target: {fileID: 2561579924206695922, guid: b489f0397e951734fa756fd07ed7e11c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
