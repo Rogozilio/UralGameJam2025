@@ -35,7 +35,7 @@ public class MentosFall : MonoBehaviour, IRestart
 
     private void OnEnable()
     {
-        _screen.LaunchFadeOut(null, 0f);
+        //_screen.LaunchFadeOut(null, 0f);
         _audio.Play();
     }
 

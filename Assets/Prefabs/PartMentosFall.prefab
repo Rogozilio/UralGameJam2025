@@ -149,7 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.1
   speedRotate: 10
-  speedGravity: 0.007
+  speedGravity: 0.3
   pointMoveDir: {fileID: 7678191485975841656}
   udarObstacle: {fileID: 8300000, guid: 7e2916bed59c2ac4aa16721635b0a630, type: 3}
 --- !u!82 &5948455916180841329
