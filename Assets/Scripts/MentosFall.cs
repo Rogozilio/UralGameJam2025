@@ -1,9 +1,10 @@
 using System;
+using Scripts;
 using UnityEngine;
 using Zenject;
 using Input = Scripts.Input;
 
-public class MentosFall : MonoBehaviour
+public class MentosFall : MonoBehaviour, IRestart
 {
     [Inject] private ScreenFade _screen;
     [Inject] private Input _input;
@@ -13,8 +14,7 @@ public class MentosFall : MonoBehaviour
     public float speedRotate;
     public float speedGravity;
     public Transform pointMoveDir;
-    [Space] 
-    public AudioClip udarObstacle;
+    [Space] public AudioClip udarObstacle;
 
     private Rigidbody _rb;
     private Vector3 _originPosition;
@@ -35,32 +35,32 @@ public class MentosFall : MonoBehaviour
 
     private void OnEnable()
     {
-        _screen.LaunchFadeOut(null, 0f);
+        //_screen.LaunchFadeOut(null, 0f);
         _audio.Play();
     }
 
     private void FixedUpdate()
     {
         _rb.AddForce(Vector3.down * speedGravity, ForceMode.Acceleration);
-        
+
         if (_input.PressForwardMove)
         {
             _rb.MovePosition(transform.position + pointMoveDir.forward * speed * Time.fixedDeltaTime);
             transform.Rotate(pointMoveDir.right, speedRotate, Space.World);
         }
-        
+
         if (_input.PressBackMove)
         {
             _rb.MovePosition(transform.position - pointMoveDir.forward * speed * Time.fixedDeltaTime);
             transform.Rotate(pointMoveDir.right, -speedRotate, Space.World);
         }
-        
+
         if (_input.PressLeftMove)
         {
             _rb.MovePosition(transform.position - pointMoveDir.right * speed * Time.fixedDeltaTime);
             transform.Rotate(pointMoveDir.forward, speedRotate, Space.World);
         }
-        
+
         if (_input.PressRightMove)
         {
             _rb.MovePosition(transform.position + pointMoveDir.right * speed * Time.fixedDeltaTime);
@@ -68,21 +68,24 @@ public class MentosFall : MonoBehaviour
         }
     }
 
-    private void Restart()
+    public void Restart()
     {
-        _isPlayingAudioObstacle = false;
-        transform.position = _originPosition;
-        transform.eulerAngles = _originEulerAngle;
-        _rb.velocity = Vector3.zero;
-        _audio.Play();
-        _screen.LaunchFadeOut(null, 0f);
+        _screen.LaunchFadeIn((() =>
+        {
+            _isPlayingAudioObstacle = false;
+            transform.position = _originPosition;
+            transform.eulerAngles = _originEulerAngle;
+            _rb.velocity = Vector3.zero;
+            _audio.Play();
+            _screen.LaunchFadeOut(null, 0f);
+        }), 0f);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Dead"))
         {
-            _screen.LaunchFadeIn(Restart, 0f);
+            Restart();
         }
 
         if (other.gameObject.CompareTag("Finish"))
@@ -100,7 +103,7 @@ public class MentosFall : MonoBehaviour
                 _audio.PlayOneShot(udarObstacle);
                 _isPlayingAudioObstacle = true;
             }
-            
+
             _screen.LaunchFadeIn(Restart, 0f);
         }
     }

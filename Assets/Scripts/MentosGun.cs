@@ -1,10 +1,11 @@
 using System;
+using Scripts;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Zenject;
 
-public class MentosGun : MonoBehaviour
+public class MentosGun : MonoBehaviour, IRestart
 {
     [Inject] private ScreenFade _screen;
 
@@ -189,7 +190,7 @@ public class MentosGun : MonoBehaviour
         }
         else if (other.CompareTag("Dead"))
         {
-            _screen.LaunchFadeIn(Restart);
+            Restart();
         }
     }
 
@@ -198,18 +199,21 @@ public class MentosGun : MonoBehaviour
         _gameManager.SwitchGameStep(GameStep.СutsceneMentosGun_Toaster);
     }
 
-    private void Restart()
+    public void Restart()
     {
-        isThrown = false;
-        isDisabled = false;
-        elapsedTime = 0f;
-        transform.position = originStartPosition;
-        _rigidbody.useGravity = false;
-        _rigidbody.velocity = Vector3.zero;
-        _rigidbody.angularVelocity = Vector3.zero;
-        mentosGraphic.gameObject.SetActive(false);
-        audioСola.Play();
-        RefreshStartPosition();
-        _screen.LaunchFadeOut();
+        _screen.LaunchFadeIn((() =>
+        {
+            isThrown = false;
+            isDisabled = false;
+            elapsedTime = 0f;
+            transform.position = originStartPosition;
+            _rigidbody.useGravity = false;
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            mentosGraphic.gameObject.SetActive(false);
+            audioСola.Play();
+            RefreshStartPosition();
+            _screen.LaunchFadeOut();
+        }));
     }
 }

@@ -24,6 +24,16 @@ public class UIComputer : MonoBehaviour
 
     public List<ChangeMessage> changeMessages;
 
+    public AudioClip _clipClick;
+    public AudioClip _clipMessage;
+
+    private AudioSource _audio;
+
+    private void Awake()
+    {
+        _audio = GetComponent<AudioSource>();
+    }
+
     private void OnEnable()
     {
         _screen.LaunchFadeOut(null, 0f);
@@ -32,16 +42,23 @@ public class UIComputer : MonoBehaviour
     public void OpenItchIOPage()
     {
         ItchIOPage.DOAnchorPosX(0, 0.5f);
+        _audio.Stop();
+        _audio.PlayOneShot(_clipClick);
+        
     }
     
     public void CloseItchIOPage()
     {
         ItchIOPage.DOAnchorPosX(-50, 0.5f);
+        _audio.Stop();
+        _audio.PlayOneShot(_clipClick);
     }
     
     public void OpenTelegramPage()
     {
         TelegramPage.DOAnchorPosX(0, 0.5f);
+        _audio.Stop();
+        _audio.PlayOneShot(_clipClick);
     }
 
     public async void LaunchChangeMassages()
@@ -50,6 +67,8 @@ public class UIComputer : MonoBehaviour
         {
            
             TelegramScroll.DOAnchorPosY(message.positionY, message.time);
+            _audio.Stop();
+            _audio.PlayOneShot(_clipMessage);
             await UniTask.WaitForSeconds(message.wait);
             if (message.activeGoose)
             {

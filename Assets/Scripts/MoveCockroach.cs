@@ -1,7 +1,8 @@
+using Scripts;
 using UnityEngine;
 using Zenject;
 
-public class MoveCockroach : MonoBehaviour
+public class MoveCockroach : MonoBehaviour, IRestart
 {
     [Inject] private Scripts.Input _input;
     [Inject] private ScreenFade _screenFade;
@@ -17,6 +18,8 @@ public class MoveCockroach : MonoBehaviour
     public float raycastDistance = 1.5f; // Дистанция Raycast
     public LayerMask groundLayer; // Слой, на котором ищем поверхность
 
+    private AudioSource _audio;
+    
     private Vector3 surfaceNormal; // Нормаль поверхности
     
     private Vector3 _respawnPosition;
@@ -25,6 +28,7 @@ public class MoveCockroach : MonoBehaviour
     private void Awake()
     {
         _screenFade.LaunchFadeOut();
+        _audio = GetComponent<AudioSource>();
 
         _respawnPosition = transform.position;
         _respawnRotation = transform.rotation;
@@ -46,26 +50,41 @@ public class MoveCockroach : MonoBehaviour
 
     private void Move()
     {
+        //_audio.pitch = 1.5f;
         animator.speed = 0f;   
+        
         if (_input.PressForwardMove)
         {
             transform.position += transform.forward * Time.fixedDeltaTime * speed;
             animator.speed = 1f;
+            if(!_audio.isPlaying)
+                _audio.Play();
         }
         if (_input.PressBackMove)
         {
             transform.position -= transform.forward * Time.fixedDeltaTime * speed;
             animator.speed = 1f;
+            if(!_audio.isPlaying)
+                _audio.Play();
         }
         if (_input.PressLeftMove)
         {
             transform.Rotate(transform.up, -rotationSpeed, Space.World);
             animator.speed = 1f;
+            if(!_audio.isPlaying)
+                _audio.Play();
         }
         if (_input.PressRightMove)
         {
             transform.Rotate(transform.up, rotationSpeed, Space.World);
             animator.speed = 1f;
+            if(!_audio.isPlaying)
+                _audio.Play();
+        }
+
+        if (!_input.PressForwardMove && !_input.PressBackMove && !_input.PressLeftMove && !_input.PressRightMove)
+        {
+            _audio.Stop();
         }
     }
 
@@ -95,11 +114,7 @@ public class MoveCockroach : MonoBehaviour
 
         if (other.transform.CompareTag("Dead"))
         {
-            _screenFade.LaunchFadeIn(() =>
-            {
-                Restart();
-                _screenFade.LaunchFadeOut();
-            });
+            Restart();
             
         }
         
@@ -115,9 +130,13 @@ public class MoveCockroach : MonoBehaviour
         Gizmos.DrawLine(transform.position, transform.position - transform.up);
     }
 
-    private void Restart()
+    public void Restart()
     {
-        transform.position = _respawnPosition;
-        transform.rotation = _respawnRotation;
+        _screenFade.LaunchFadeIn(() =>
+        {
+            transform.position = _respawnPosition;
+            transform.rotation = _respawnRotation;
+            _screenFade.LaunchFadeOut();
+        });
     }
 }

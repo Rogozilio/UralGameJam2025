@@ -1,11 +1,12 @@
 using System.Collections;
 using Cysharp.Threading.Tasks;
+using Scripts;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
 using Input = Scripts.Input;
 
-public class Toaster : MonoBehaviour
+public class Toaster : MonoBehaviour, IRestart
 {
     [Inject] private Input _input;
     [Inject] private ScreenFade _screen;
@@ -39,18 +40,18 @@ public class Toaster : MonoBehaviour
     {
         _originLocalRotate = arrow.localEulerAngles;
         _input.OnAction += PrepareOrLaunchArrow;
-        
-        if(!_screen.isVisible)
+
+        if (!_screen.isVisible)
             _screen.LaunchFadeOut(LaunchStartToasterMinigame);
         else
             LaunchStartToasterMinigame();
     }
-    
+
     public void LaunchStartToasterMinigame()
     {
         StartCoroutine(StartToasterMinigame());
     }
-    
+
     private IEnumerator StartToasterMinigame()
     {
         yield return new WaitForSeconds(millisecondsForBegin);
@@ -101,7 +102,7 @@ public class Toaster : MonoBehaviour
             FailBeforeFinish();
         }
     }
-    
+
     private async void Finish()
     {
         Debug.Log("Finish");
@@ -121,9 +122,9 @@ public class Toaster : MonoBehaviour
         _audio.Play();
         _collider.enabled = false;
         particleFail.Play();
-        _screen.LaunchFadeIn(Restart, 3f);
+        Restart();
     }
-    
+
     private void FailBeforeFinish()
     {
         Debug.Log("Before Dead");
@@ -132,18 +133,21 @@ public class Toaster : MonoBehaviour
         _audio.Play();
         _collider.enabled = false;
         animator.Play("ToasterFail");
-        _screen.LaunchFadeIn(Restart, 1f);
+        Restart();
     }
 
-    private void Restart()
+    public void Restart()
     {
-        _isBegin = false;
-        _isStop = false;
-        _angleRotate = 0f;
-        arrow.localEulerAngles = _originLocalRotate;
-        animator.Play("ToasterDefault");
-        particleFail.Stop();
-        particleFail.Clear();
-        _screen.LaunchFadeOut(LaunchStartToasterMinigame);
+        _screen.LaunchFadeIn(() =>
+        {
+            _isBegin = false;
+            _isStop = false;
+            _angleRotate = 0f;
+            arrow.localEulerAngles = _originLocalRotate;
+            animator.Play("ToasterDefault");
+            particleFail.Stop();
+            particleFail.Clear();
+            _screen.LaunchFadeOut(LaunchStartToasterMinigame);
+        }, 3f);
     }
 }

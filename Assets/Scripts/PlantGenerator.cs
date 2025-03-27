@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Scripts;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
 using Input = Scripts.Input;
 
-public class PlantGenerator : MonoBehaviour
+public class PlantGenerator : MonoBehaviour, IRestart
 {
     [Inject] private ScreenFade _screen;
     [Inject] private Input _input;
@@ -24,12 +25,19 @@ public class PlantGenerator : MonoBehaviour
     public UnityEvent onEnterFinishZone;
     public UnityEvent onEnterDeadZone;
 
+    public AudioClip _clipPunch;
+    public AudioClip _clipFinish;
+    
+    private AudioSource _audio;
+
     private float _originForceLeft;
     private Vector3 _originPosition;
     private Vector3 _originEulerRotate;
 
     void Awake()
     {
+        _audio = GetComponent<AudioSource>();
+        
         points = new List<Vector3>();
         AddPoint(pointGrow.localPosition);
         AddPoint(pointGrow.localPosition);
@@ -43,6 +51,7 @@ public class PlantGenerator : MonoBehaviour
     {
         _input.OnAction += ChangeForceLeftToRight;
         _screen.LaunchFadeOut(null, 0f);
+        _audio.Play();
     }
 
     private void OnDisable()
@@ -92,33 +101,43 @@ public class PlantGenerator : MonoBehaviour
     {
         if (other.transform.CompareTag("Finish"))
         {
+            _audio.Stop();
+            _audio.pitch = 0.4f;
+            _audio.PlayOneShot(_clipFinish);
             pointGrow.up = Vector3.up;
             animator.Play("Bloom");
             enabled = false;
-            _gameManager.SwitchGameStep(GameStep.CutscenePlant_Bee, 2f);
+            _gameManager.SwitchGameStep(GameStep.CutscenePlant_Bee, 5f);
         }
         
         if (other.transform.CompareTag("Respawn"))
         {
-            _screen.LaunchFadeIn(Restart);
+            _audio.PlayOneShot(_clipPunch);
+            Restart();
             enabled = false;
             onEnterDeadZone?.Invoke();
         }
     }
 
-    private void Restart()
+    public void Restart()
     {
-        enabled = true;
-        forceLeft = _originForceLeft;
-        transform.position = _originPosition;
-        transform.eulerAngles = _originEulerRotate;
+        _screen.LaunchFadeIn(() =>
+        {
+            enabled = true;
+            forceLeft = _originForceLeft;
+            transform.position = _originPosition;
+            transform.eulerAngles = _originEulerRotate;
 
-        mesh.mesh = new Mesh();
-        
-        points = new List<Vector3>();
-        AddPoint(pointGrow.localPosition);
-        AddPoint(pointGrow.localPosition);
-        
-        _screen.LaunchFadeOut(null, 0f);
+            mesh.mesh = new Mesh();
+
+            points = new List<Vector3>();
+            AddPoint(pointGrow.localPosition);
+            AddPoint(pointGrow.localPosition);
+
+            _audio.Stop();
+            _audio.Play();
+
+            _screen.LaunchFadeOut(null, 0f);
+        });
     }
 }

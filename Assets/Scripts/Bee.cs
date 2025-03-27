@@ -15,6 +15,8 @@ public class Bee : MonoBehaviour, IRestart
     public Transform target;
     public Transform model;
     public Rigidbody rb;
+
+    private AudioSource _audio;
     
     private float _inclinationAngle;
     private float _inclinationAngleModel;
@@ -24,12 +26,14 @@ public class Bee : MonoBehaviour, IRestart
 
     private void Awake()
     {
+        _audio = GetComponent<AudioSource>();
         _originPosition = target.position;
         _originEulerAngle = target.eulerAngles;
     }
 
     private void OnEnable()
     {
+        _audio.Play();
         _screenFade.LaunchFadeOut(null, 0f);
     }
 
@@ -109,6 +113,8 @@ public class Bee : MonoBehaviour, IRestart
     {
         _screenFade.LaunchFadeIn(() =>
         {
+            _audio.Stop();
+            _audio.Play();
             target.position = _originPosition;
             target.eulerAngles = _originPosition;
             _screenFade.LaunchFadeOut(null, 0f);
