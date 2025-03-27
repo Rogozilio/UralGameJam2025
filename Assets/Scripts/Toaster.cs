@@ -150,4 +150,9 @@ public class Toaster : MonoBehaviour, IRestart
             _screen.LaunchFadeOut(LaunchStartToasterMinigame);
         }, 3f);
     }
+
+    public void FadeIn()
+    {
+        
+    }
 }

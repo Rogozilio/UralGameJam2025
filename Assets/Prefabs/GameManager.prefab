@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c2f4ac790efc458ad52e8f6bf7f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameStep: 5
+  gameStep: 7
   cutsceneBegin: {fileID: 0}
   cutsceneMentosMove_MentosFall: {fileID: 0}
   cutsceneMentosFall_MentosGun: {fileID: 0}
@@ -1883,10 +1883,40 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1494319289457455402}
     m_Modifications:
+    - target: {fileID: 950860501807096476, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6283255
+      objectReference: {fileID: 0}
+    - target: {fileID: 950860501807096476, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.65738785
+      objectReference: {fileID: 0}
+    - target: {fileID: 950860501807096476, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.30072203
+      objectReference: {fileID: 0}
     - target: {fileID: 4532040870601073622, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
         type: 3}
       propertyPath: m_Name
       value: PartBee
+      objectReference: {fileID: 0}
+    - target: {fileID: 8455476642264959630, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6334364
+      objectReference: {fileID: 0}
+    - target: {fileID: 8455476642264959630, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.27598143
+      objectReference: {fileID: 0}
+    - target: {fileID: 8455476642264959630, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.28874663
       objectReference: {fileID: 0}
     - target: {fileID: 8653246901678561675, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
         type: 3}
@@ -1937,6 +1967,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047524209094532699, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6383515
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047524209094532699, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.26441383
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047524209094532699, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.66787785
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047524209094532699, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.27664405
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

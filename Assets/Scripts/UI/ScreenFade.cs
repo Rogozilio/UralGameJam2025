@@ -7,11 +7,16 @@ public class ScreenFade : MonoBehaviour
     public Image fadePanel; // Ссылка на панель
     public float fadeDuration = 2f; // Длительность затемнения
 
-    private bool _isVisible = false;
+    private bool _isVisible = true;
 
     private Coroutine _coroutineFadeIn;
     private Coroutine _coroutineFadeOut;
     public bool isVisible => _isVisible;
+
+    public void FadeIn()
+    {
+        LaunchFadeIn(null, 0f);
+    }
     public void LaunchFadeIn(Action onFinish = null, float delay = 0f)
     {
         if(_coroutineFadeOut != null)
