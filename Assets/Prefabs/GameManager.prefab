@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a5c2f4ac790efc458ad52e8f6bf7f5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameStep: 7
+  gameStep: 11
   cutsceneBegin: {fileID: 0}
   cutsceneMentosMove_MentosFall: {fileID: 0}
   cutsceneMentosFall_MentosGun: {fileID: 0}
@@ -1886,17 +1886,22 @@ PrefabInstance:
     - target: {fileID: 950860501807096476, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.6283255
+      value: 0.62832546
+      objectReference: {fileID: 0}
+    - target: {fileID: 950860501807096476, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.28742746
       objectReference: {fileID: 0}
     - target: {fileID: 950860501807096476, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.65738785
+      value: 0.6573879
       objectReference: {fileID: 0}
     - target: {fileID: 950860501807096476, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.30072203
+      value: 0.30072206
       objectReference: {fileID: 0}
     - target: {fileID: 4532040870601073622, guid: f0046ef8b011c3d4eaf3c05ca4659f93,
         type: 3}

@@ -12,6 +12,7 @@ public class PlantGenerator : MonoBehaviour, IRestart
     [Inject] private Input _input;
     [Inject] private GameManager _gameManager;
 
+    public ParticleSystem pilca;
     public MeshFilter mesh;
     public Animator animator;
     public Transform pointGrow;
@@ -101,6 +102,7 @@ public class PlantGenerator : MonoBehaviour, IRestart
     {
         if (other.transform.CompareTag("Finish"))
         {
+            pilca.Play();
             _audio.Stop();
             _audio.pitch = 0.4f;
             _audio.PlayOneShot(_clipFinish);
