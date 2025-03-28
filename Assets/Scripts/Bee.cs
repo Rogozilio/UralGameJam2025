@@ -125,7 +125,9 @@ public class Bee : MonoBehaviour, IRestart
     {
         if (other.transform.CompareTag("Finish"))
         {
+            _audio.Stop();
             _gameManager.SwitchGameStep(GameStep.CutsceneBee_Computer);
+            model.gameObject.SetActive(false);
         }
     }
 }
