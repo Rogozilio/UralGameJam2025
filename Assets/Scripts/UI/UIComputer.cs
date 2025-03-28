@@ -26,17 +26,35 @@ public class UIComputer : MonoBehaviour
 
     public AudioClip _clipClick;
     public AudioClip _clipMessage;
+    [Space]
+    public AudioClip _voiceStart;
+    public AudioClip _voiceMissItchIO;
+    public AudioClip _voiceFinishItchIO;
+    public AudioClip _voiceFinish;
 
-    private AudioSource _audio;
+    public AudioSource _audio;
+    public AudioSource _audioVoice;
+
+    private bool _isFinishItchIO;
 
     private void Awake()
     {
         _audio = GetComponent<AudioSource>();
     }
 
-    private void OnEnable()
+    public void PlayBeginVoice()
     {
-        _screen.LaunchFadeOut(null, 0f);
+        if(_audioVoice.isPlaying)
+            _audioVoice.Stop();
+        _audioVoice.PlayOneShot(_voiceStart);
+    }
+    
+    public void PlayFinishItchIO()
+    {
+        _isFinishItchIO = true;
+        if(_audioVoice.isPlaying)
+            _audioVoice.Stop();
+        _audioVoice.PlayOneShot(_voiceFinishItchIO);
     }
 
     public void OpenItchIOPage()
@@ -56,6 +74,13 @@ public class UIComputer : MonoBehaviour
     
     public void OpenTelegramPage()
     {
+        if (!_isFinishItchIO)
+        {
+            if(_audioVoice.isPlaying)
+                _audioVoice.Stop();
+            _audioVoice.PlayOneShot(_voiceMissItchIO);
+            return;
+        }
         TelegramPage.DOAnchorPosX(0, 0.5f);
         _audio.Stop();
         _audio.PlayOneShot(_clipClick);
@@ -76,5 +101,9 @@ public class UIComputer : MonoBehaviour
                 await UniTask.WaitForSeconds(message.wait);
             }
         }
+        
+        if(_audioVoice.isPlaying)
+            _audioVoice.Stop();
+        _audioVoice.PlayOneShot(_voiceFinish);
     }
 }

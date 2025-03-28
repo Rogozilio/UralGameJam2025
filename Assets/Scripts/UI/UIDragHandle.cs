@@ -49,16 +49,14 @@ public class UIDragHandle :MonoBehaviour
         // Когда ЛКМ отпущена
         if (Input.GetMouseButtonUp(0))
         {
-            isDragging = false;
-            
             // Проверяем, пересекается ли объект с зоной
-            if (IsOverDropZone())
+            if (IsOverDropZone() && isDragging)
             {
                 onDropZone?.Invoke();
                 // Устанавливаем объект в центр зоны
                 // SnapToDropZone();
             }
-            
+            isDragging = false;
             ReturnToRespawn();
         }
 
