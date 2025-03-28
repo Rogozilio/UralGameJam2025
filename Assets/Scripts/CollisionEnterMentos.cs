@@ -6,6 +6,7 @@ namespace Scripts
     public class CollisionEnterMentos : MonoBehaviour
     {
         [Inject] private GameManager _gameManager;
+        [Inject] private UIControll _uiControll;
         public MoveMentos mentos;
 
         private void OnCollisionEnter(Collision other)
@@ -18,10 +19,10 @@ namespace Scripts
         
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("asdasdasd");
             if (other.transform.CompareTag("Finish"))
             {
                 _gameManager.SwitchGameStep(GameStep.CutsceneMentosMove_MentosFall);
+                _uiControll.DisableAll();
             }
         }
     }

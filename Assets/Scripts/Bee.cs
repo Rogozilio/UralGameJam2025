@@ -11,6 +11,7 @@ public class Bee : MonoBehaviour, IRestart
     [Inject] private ScreenFade _screenFade;
     [Inject] private GameManager _gameManager;
     [Inject] private UIMenu _menu;
+    [Inject] private UIControll _uiControll;
     
     public float speedInclination = 0.2f;
 
@@ -44,6 +45,7 @@ public class Bee : MonoBehaviour, IRestart
     private void OnEnable()
     {
         _audio.Play();
+        _uiControll.EnableBee();
         _screenFade.LaunchFadeOut(null, 0f);
     }
 
@@ -119,6 +121,7 @@ public class Bee : MonoBehaviour, IRestart
     {
         if (other.transform.CompareTag("Finish"))
         {
+            _uiControll.DisableAll();
             _audio.Stop();
             _gameManager.SwitchGameStep(GameStep.CutsceneBee_Computer);
             model.gameObject.SetActive(false);

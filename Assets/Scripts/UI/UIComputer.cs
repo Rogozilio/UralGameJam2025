@@ -16,6 +16,7 @@ public struct ChangeMessage
 public class UIComputer : MonoBehaviour
 {
     [Inject] private ScreenFade _screen;
+    [Inject] private UIControll _uiControll;
     
     public GameObject goose;
     public RectTransform ItchIOPage;

@@ -7,6 +7,7 @@ public class MoveCockroach : MonoBehaviour, IRestart
     [Inject] private Scripts.Input _input;
     [Inject] private ScreenFade _screenFade;
     [Inject] private GameManager _gameManager;
+    [Inject] private UIControll _uiControll;
     
     public float speed = 5f;
     public float rotationSpeed = 10f;
@@ -37,6 +38,7 @@ public class MoveCockroach : MonoBehaviour, IRestart
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        _uiControll.EnableCockroach();
     }
 
     void FixedUpdate()
@@ -120,8 +122,9 @@ public class MoveCockroach : MonoBehaviour, IRestart
         
         if (other.transform.CompareTag("Finish"))
         {
+            _uiControll.DisableAll();
             _gameManager.SwitchGameStep(GameStep.CutsceneCockroach_Plant);
-            
+            enabled = false;
         }
     }
 

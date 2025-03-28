@@ -9,6 +9,7 @@ public class MentosFall : MonoBehaviour, IRestart
     [Inject] private ScreenFade _screen;
     [Inject] private Input _input;
     [Inject] private GameManager _gameManager;
+    [Inject] private UIControll _uiControll;
 
     public float speed;
     public float speedRotate;
@@ -36,6 +37,7 @@ public class MentosFall : MonoBehaviour, IRestart
     private void OnEnable()
     {
         //_screen.LaunchFadeOut(null, 0f);
+        _uiControll.EnableMentosFall();
         _audio.Play();
     }
 
@@ -90,6 +92,7 @@ public class MentosFall : MonoBehaviour, IRestart
 
         if (other.gameObject.CompareTag("Finish"))
         {
+            _uiControll.DisableAll();
             _gameManager.SwitchGameStep(GameStep.CutsceneMentosFall_MentosGun);
         }
     }

@@ -14,6 +14,7 @@ public class MoveMentos : MonoBehaviour, IRestart
     
     [Inject] private Input _input;
     [Inject] private ScreenFade _screen;
+    [Inject] private UIControll _uiControll;
   
 
     private Rigidbody _rigidbody;
@@ -43,6 +44,7 @@ public class MoveMentos : MonoBehaviour, IRestart
         _isActiveMove = true;
         _screen.LaunchFadeOut(null, 0f);
         _audio.Play();
+        _uiControll.EnableMentosMove();
     }
 
     private void FixedUpdate()

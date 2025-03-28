@@ -11,6 +11,7 @@ public class PlantGenerator : MonoBehaviour, IRestart
     [Inject] private ScreenFade _screen;
     [Inject] private Input _input;
     [Inject] private GameManager _gameManager;
+    [Inject] private UIControll _uiControll;
 
     public ParticleSystem pilca;
     public MeshFilter mesh;
@@ -50,6 +51,7 @@ public class PlantGenerator : MonoBehaviour, IRestart
 
     private void OnEnable()
     {
+        _uiControll.EnablePlant();
         _input.OnAction += ChangeForceLeftToRight;
         _screen.LaunchFadeOut(null, 0f);
         _audio.Play();
@@ -102,6 +104,7 @@ public class PlantGenerator : MonoBehaviour, IRestart
     {
         if (other.transform.CompareTag("Finish"))
         {
+            _uiControll.DisableAll();
             pilca.Play();
             _audio.Stop();
             _audio.pitch = 0.4f;

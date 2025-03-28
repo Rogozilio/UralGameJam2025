@@ -33,6 +33,7 @@ public class MentosGun : MonoBehaviour, IRestart
 
     [Inject] private Scripts.Input _input;
     [Inject] private GameManager _gameManager;
+    [Inject] private UIControll _uiControll;
 
     private Rigidbody _rigidbody;
     private Vector3 startPosition;
@@ -60,6 +61,7 @@ public class MentosGun : MonoBehaviour, IRestart
 
     private void OnEnable()
     {
+        _uiControll.EnableMentosGun();
         _screen.LaunchFadeOut();
         _input.OnAction += Fire;
         transform.localScale = new Vector3(scale, scale, scale);
@@ -189,6 +191,7 @@ public class MentosGun : MonoBehaviour, IRestart
             if (!enabled) return;
             if (other.TryGetComponent(out ActiveGameObject activeGameObject))
             {
+                _uiControll.DisableAll();
                 activeGameObject.Action?.Invoke();
                 virtualCamera.SetActive(false);
                 gameObject.SetActive(false);

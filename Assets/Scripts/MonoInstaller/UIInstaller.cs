@@ -7,5 +7,6 @@ public class UIInstaller : MonoInstaller
     {
         Container.Bind<ScreenFade>().ToSelf().FromComponentsInHierarchy().AsSingle().NonLazy();
         Container.Bind<UIMenu>().ToSelf().FromComponentsInHierarchy().AsSingle().NonLazy();
+        Container.Bind<UIControll>().ToSelf().FromComponentsInHierarchy().AsSingle().NonLazy();
     }
 }

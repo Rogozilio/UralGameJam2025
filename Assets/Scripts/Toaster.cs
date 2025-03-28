@@ -11,6 +11,7 @@ public class Toaster : MonoBehaviour, IRestart
     [Inject] private Input _input;
     [Inject] private ScreenFade _screen;
     [Inject] private GameManager _gameManager;
+    [Inject] private UIControll _uiControll;
 
     public Animator animator;
     public ParticleSystem particleFail;
@@ -38,6 +39,7 @@ public class Toaster : MonoBehaviour, IRestart
 
     private void OnEnable()
     {
+        _uiControll.EnableToaster();
         _originLocalRotate = arrow.localEulerAngles;
         _input.OnAction += PrepareOrLaunchArrow;
 
@@ -110,6 +112,7 @@ public class Toaster : MonoBehaviour, IRestart
         _audio.Play();
         _collider.enabled = false;
         animator.Play("ToasterFinish");
+        _uiControll.DisableAll();
         await UniTask.WaitForSeconds(0.3f);
         _gameManager.SwitchGameStep(GameStep.CutsceneToaster_Cockroach);
     }
