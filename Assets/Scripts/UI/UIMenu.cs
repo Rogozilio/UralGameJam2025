@@ -23,6 +23,8 @@ public class UIMenu : MonoBehaviour
     public Slider volumeVFX;
     public Slider volumeCutscene;
 
+    public float GetMouseSens => mouseSensitivity.value;
+
     private void Awake()
     {
         mainPanel.SetActive(false);

@@ -1,4 +1,5 @@
 using System;
+using Cinemachine;
 using Scripts;
 using UnityEngine;
 using Zenject;
@@ -9,12 +10,15 @@ public class Bee : MonoBehaviour, IRestart
     [Inject] private Input _input;
     [Inject] private ScreenFade _screenFade;
     [Inject] private GameManager _gameManager;
+    [Inject] private UIMenu _menu;
     
     public float speedInclination = 0.2f;
 
     public Transform target;
     public Transform model;
     public Rigidbody rb;
+
+    public CinemachineFreeLook camera;
 
     private AudioSource _audio;
     
@@ -24,11 +28,17 @@ public class Bee : MonoBehaviour, IRestart
     private Vector3 _originPosition;
     private Vector3 _originEulerAngle;
 
+    private float _originSpeedX;
+    private float _originSpeedY;
+
     private void Awake()
     {
         _audio = GetComponent<AudioSource>();
         _originPosition = target.position;
         _originEulerAngle = target.eulerAngles;
+
+        _originSpeedX = camera.m_XAxis.m_MaxSpeed;
+        _originSpeedY = camera.m_YAxis.m_MaxSpeed;
     }
 
     private void OnEnable()
@@ -41,6 +51,9 @@ public class Bee : MonoBehaviour, IRestart
     {
         MoveSystem();
         RotateSystem();
+        
+        camera.m_XAxis.m_MaxSpeed = _originSpeedX * _menu.GetMouseSens;
+        camera.m_YAxis.m_MaxSpeed = _originSpeedY * _menu.GetMouseSens;
     }
 
     private void MoveSystem()
@@ -59,25 +72,6 @@ public class Bee : MonoBehaviour, IRestart
             rb.velocity = -target.forward;
             _inclinationAngleModel -= speedInclination;
         }
-
-        // if (_input.PressLeftMove)
-        // {
-        //     rb.velocity = -target.right;
-        //     _inclinationAngle += speedInclination;
-        // }
-        //
-        // if (_input.PressRightMove)
-        // {
-        //     rb.velocity = target.right;
-        //     _inclinationAngle -= speedInclination;
-        // }
-        
-        // if (!_input.PressRightMove && !_input.PressLeftMove)
-        // {
-        //     _inclinationAngle += _inclinationAngle > 0 ? -speedInclination : speedInclination;
-        //     if (_inclinationAngle <= 0.5f && _inclinationAngle >= -0.5f)
-        //         _inclinationAngle = 0f;
-        // }
         
         if (!_input.PressForwardMove && !_input.PressBackMove)
         {

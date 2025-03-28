@@ -8,6 +8,7 @@ using Zenject;
 public class MentosGun : MonoBehaviour, IRestart
 {
     [Inject] private ScreenFade _screen;
+    [Inject] private UIMenu _menu;
 
     public bool isActive;
     public GameObject virtualCamera;
@@ -141,12 +142,14 @@ public class MentosGun : MonoBehaviour, IRestart
 
     private void MoveTarget()
     {
-        linearMove += math.clamp(_input.deltaMovePosition.y, -deltaDistanceCurve, deltaDistanceCurve);
+        linearMove += math.clamp(_input.deltaMovePosition.y, -deltaDistanceCurve * _menu.GetMouseSens,
+            deltaDistanceCurve * _menu.GetMouseSens);
         linearMove = math.clamp(linearMove, minDistanceCurve, maxDistanceCurve);
 
         targetPosition.position = transform.position + transform.forward * linearMove;
 
-        var angleRotate = math.clamp(_input.deltaMovePosition.x, -deltaRotateCurve, deltaRotateCurve);
+        var angleRotate = math.clamp(_input.deltaMovePosition.x, -deltaRotateCurve * _menu.GetMouseSens,
+            deltaRotateCurve * _menu.GetMouseSens);
         transform.Rotate(Vector3.up, angleRotate, Space.World);
     }
 
